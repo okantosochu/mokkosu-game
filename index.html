@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#17130f">
+<title>神戸の中華そば もっこす　新人修行中！</title>
+<style>
+:root{--gold:#f0b42b;--red:#a82118;--ink:#17130f;--cream:#fff4d6}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#111;color:white;font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;display:flex;justify-content:center}
+#game{width:min(100vw,480px);min-height:100svh;background:linear-gradient(#271d13,#111);position:relative;overflow:hidden}
+header{padding:10px 12px;background:#17130f;border-bottom:3px solid var(--gold)}
+.brand{font-weight:900;font-size:17px}.brand small{display:block;color:var(--gold);font-size:12px}
+.hud{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:8px}
+.order,.timer{background:#fff;color:#111;border-radius:10px;padding:9px;font-weight:800}
+.timer{background:var(--gold);font-size:22px;min-width:82px;text-align:center}
+.scene{height:250px;position:relative;background:linear-gradient(#d7c4a0 0 43%,#9c2119 43% 52%,#9c9a91 52%);overflow:hidden}
+.wall{position:absolute;inset:0 0 57% 0;background:#dfd1b6}
+.customer{position:absolute;top:55px;left:48%;width:55px;height:85px;border-radius:28px 28px 12px 12px;background:#54463c;opacity:.7}
+.customer:before{content:"";position:absolute;width:42px;height:42px;border-radius:50%;background:#cba888;left:7px;top:-30px}
+.senpai{position:absolute;right:16px;top:18px;width:95px;height:150px;background:#111;border-radius:42px 42px 12px 12px;box-shadow:0 5px 14px #0008}
+.senpai:before{content:"";position:absolute;top:-10px;left:23px;width:50px;height:50px;border-radius:50%;background:#171717}
+.senpai:after{content:"神戸の中華そば\Aもっこす";white-space:pre;position:absolute;top:55px;left:5px;width:85px;text-align:center;color:#ffd335;font-weight:900;font-size:12px;line-height:1.35}
+.counter{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(#b52c20 0 13%,#a5a39b 13%);border-top:4px solid #5d1712}
+.bowl{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);width:175px;height:92px;border-radius:12px 12px 85px 85px;background:#f8f5eb;border:7px solid #d7d0c1;box-shadow:0 10px 15px #0006;overflow:hidden}
+.bowl .inside{position:absolute;left:7px;right:7px;top:7px;height:52px;border-radius:50%;background:#eee8d8;overflow:hidden}
+.bowl .inside:before{content:"もっこす";position:absolute;top:3px;left:52px;color:#b5231b;font-weight:900;font-size:12px}
+.layer{position:absolute;inset:0;display:none}
+#soup{background:#6f3b1eaa}
+#noodles{background:repeating-linear-gradient(100deg,#e7c16b 0 5px,#d7a94f 5px 8px);inset:14px 12px 3px}
+#pork{inset:9px;background:radial-gradient(ellipse at center,#b8755d 0 38%,#8b4b39 40% 55%,transparent 57%);transform:scale(1.35)}
+#green{inset:12px 48px;background:#3e8b38;border-radius:50%}
+.status{padding:8px 12px;background:#241b14;border-top:2px solid #58462f;font-size:14px;min-height:42px}
+.controls{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px}
+button{border:0;border-radius:14px;padding:17px 8px;font-weight:900;font-size:17px;background:#f7efe1;color:#20170f;box-shadow:0 4px 0 #8f8170;touch-action:manipulation}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 #8f8170}
+button.done{grid-column:1/-1;background:var(--gold);font-size:20px}
+button:disabled{opacity:.35}
+.footer{display:flex;gap:8px;padding:0 12px 14px}.footer button{flex:1;padding:11px;font-size:13px;background:#33281e;color:#fff;box-shadow:none}
+.overlay{position:absolute;inset:0;background:#000d;display:flex;align-items:center;justify-content:center;padding:24px;z-index:10}
+.card{background:#fff;color:#17130f;border-radius:20px;padding:22px;width:100%;text-align:center;border:5px solid var(--gold)}
+.card h1{font-size:25px;margin:0 0 8px}.card p{line-height:1.65}.card button{width:100%;background:var(--gold);margin-top:8px}
+.hidden{display:none}
+.note{font-size:11px;color:#ddd;padding:0 12px 12px;text-align:center}
+</style>
+</head>
+<body>
+<main id="game">
+<header>
+ <div class="brand">神戸の中華そば もっこす <small>新人修行中！　Lv.1 試作版</small></div>
+ <div class="hud"><div class="order">注文：中華そば × 1</div><div class="timer" id="timer">45</div></div>
+</header>
+<section class="scene">
+ <div class="wall"></div><div class="customer"></div><div class="senpai"></div><div class="counter"></div>
+ <div class="bowl"><div class="inside"><div id="soup" class="layer"></div><div id="noodles" class="layer"></div><div id="pork" class="layer"></div><div id="green" class="layer"></div></div></div>
+</section>
+<div class="status" id="status">注文どおりに、中華そばを仕上げよう。</div>
+<section class="controls">
+ <button data-step="soup">① スープ</button><button data-step="noodles">② 麺</button>
+ <button data-step="pork">③ チャーシュー</button><button data-step="green">④ ネギ</button>
+ <button class="done" id="serve">できた！ 提供する</button>
+</section>
+<div class="footer"><button id="reset">やり直す</button><button id="sound">音：ON</button></div>
+<div class="note">スマホ縦画面・片手タップ操作を想定した Lv.1 動作確認版です。</div>
+<div class="overlay" id="start"><div class="card"><h1>新人修行中！</h1><p>まずは <b>中華そば1杯</b>。<br>材料を正しい順番でタップして、45秒以内に提供してください。</p><button id="startBtn">修行開始</button></div></div>
+<div class="overlay hidden" id="result"><div class="card"><h1 id="resultTitle"></h1><p id="resultText"></p><button id="again">もう一度 Lv.1</button></div></div>
+</main>
+<script>
+const order=["soup","noodles","pork","green"]; let progress=[], time=45, ticking=null, active=false, sound=true;
+const labels={soup:"スープ",noodles:"麺",pork:"チャーシュー",green:"ネギ"};
+function resetGame(){
+ progress=[]; time=45; active=true; document.querySelector("#timer").textContent=time;
+ document.querySelector("#status").textContent="注文どおりに、中華そばを仕上げよう。";
+ document.querySelectorAll(".layer").forEach(x=>x.style.display="none");
+ document.querySelectorAll("[data-step]").forEach(x=>x.disabled=false);
+ clearInterval(ticking); ticking=setInterval(()=>{ if(!active)return; time--; timer.textContent=time; if(time<=0) finish(false,"時間切れ！"); },1000);
+}
+function finish(ok,msg){
+ active=false; clearInterval(ticking); resultTitle.textContent=ok?"修行成功！":"GAME OVER";
+ resultText.textContent=ok?"中華そば、できました！ 先輩はまだ背中を向けています。":msg+" コンティニューはありません。";
+ result.classList.remove("hidden");
+}
+document.querySelectorAll("[data-step]").forEach(btn=>btn.onclick=()=>{
+ if(!active)return;
+ const step=btn.dataset.step, expected=order[progress.length];
+ if(step!==expected){ finish(false,"順番が違います。「"+labels[expected]+"」の番でした。"); return; }
+ progress.push(step); document.querySelector("#"+step).style.display="block"; btn.disabled=true;
+ status.textContent=progress.length===4?"完成！「できた！」を押して提供しよう。":"次は「"+labels[order[progress.length]]+"」。";
+});
+serve.onclick=()=>{ if(!active)return; if(progress.length===4)finish(true); else finish(false,"まだ中華そばが完成していません。"); };
+startBtn.onclick=()=>{start.classList.add("hidden");resetGame()};
+again.onclick=()=>{result.classList.add("hidden");resetGame()};
+reset.onclick=()=>{ if(active)resetGame(); };
+document.querySelector("#sound").onclick=()=>{sound=!sound;document.querySelector("#sound").textContent="音："+(sound?"ON":"OFF")};
+</script>
+</body></html>
