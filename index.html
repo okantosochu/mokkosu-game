@@ -44,23 +44,104 @@ button:disabled{opacity:.35}
 .hidden{display:none}.musicTag{font-size:11px;color:#ffd35a;padding:0 12px 10px;text-align:center}
 .settingsRow{display:flex;gap:8px;margin-top:10px}
 .settingsRow button{flex:1}
+
+/* v0.5 visual production foundation */
+.scene{
+ height:300px;
+ background:
+   linear-gradient(90deg,transparent 0 12%,#c9c4b9 12% 14%,transparent 14% 86%,#c9c4b9 86% 88%,transparent 88%),
+   linear-gradient(#e7e1d5 0 32%,#c9c4b9 32% 34%,#f0ece3 34% 43%,#8e211a 43% 48%,#c7c5be 48% 100%);
+ box-shadow:inset 0 0 35px #0003;
+}
+.scene:before{
+ content:"";
+ position:absolute;left:0;right:0;top:0;height:42%;
+ background:
+   linear-gradient(90deg,#3e3a34 0 10%,transparent 10% 90%,#3e3a34 90%),
+   repeating-linear-gradient(90deg,transparent 0 70px,#d8d3c9 70px 73px);
+ opacity:.35;
+}
+.kitchenRail{
+ position:absolute;left:0;right:0;bottom:115px;height:18px;
+ background:linear-gradient(#deddd7,#777,#bdbcb7);
+ box-shadow:0 3px 6px #0005;
+}
+.worktop{
+ position:absolute;left:0;right:0;bottom:0;height:118px;
+ background:linear-gradient(#b9b8b1 0 5%,#8f8e88 5% 9%,#b7b6b0 9% 100%);
+ border-top:5px solid #e0dfda;
+}
+.counter{
+ bottom:118px;height:36px;
+ background:linear-gradient(#8e1712 0 20%,#b52b20 20% 78%,#69100d 78%);
+ border-top:0;box-shadow:0 5px 9px #0006;
+}
+.customer{top:58px;left:40%;opacity:.55}
+.senpaiWrap{right:8px;top:18px;width:112px;height:175px}
+.senpai{
+ background:linear-gradient(90deg,#0d0d0d,#252525 45%,#101010);
+ border-radius:36px 36px 8px 8px;
+}
+.senpai:before{background:#171717;box-shadow:inset -8px 0 0 #292929}
+.senpai:after{
+ content:"神戸の中華そば\Aもっこす";
+ top:62px;color:#f2cc35;letter-spacing:.5px
+}
+.photoDish{
+ bottom:8px;width:220px;height:112px;border-radius:8px 8px 70px 70px;
+ border:5px solid #eee9df;background:#f6f3eb;
+ box-shadow:0 9px 16px #0007;
+}
+.photoDish img{object-position:center 54%}
+.emptyBowl{
+ background:radial-gradient(ellipse at 50% 38%,#eee9dd 0 36%,#fbfaf6 37% 61%,#ddd7cb 62% 68%,transparent 69%);
+}
+.ingredientPreview{
+ position:absolute;left:50%;bottom:23px;transform:translateX(-50%);
+ width:182px;height:75px;pointer-events:none;z-index:4;
+}
+.ingredientPreview .broth,.ingredientPreview .noodle,.ingredientPreview .meat,.ingredientPreview .onion{
+ position:absolute;display:none;
+}
+.ingredientPreview .broth{left:15px;right:15px;bottom:5px;height:48px;border-radius:50%;background:#704326cc}
+.ingredientPreview .noodle{left:25px;right:25px;bottom:13px;height:35px;border-radius:50%;background:repeating-linear-gradient(105deg,#e2bd67 0 5px,#c99b47 5px 8px)}
+.ingredientPreview .meat{width:58px;height:32px;border-radius:50%;background:radial-gradient(ellipse,#c58a72 0 45%,#8c503e 48% 68%,#6b392e 70%);bottom:25px}
+.ingredientPreview .meat.m1{left:24px;transform:rotate(-12deg)}
+.ingredientPreview .meat.m2{left:62px;bottom:31px}
+.ingredientPreview .meat.m3{right:22px;transform:rotate(13deg)}
+.ingredientPreview .onion{left:72px;bottom:35px;width:55px;height:25px;border-radius:50%;background:repeating-linear-gradient(25deg,#2f8c39 0 5px,#62a94c 5px 9px)}
+.controls button{position:relative;overflow:hidden}
+.controls button:before{display:block;font-size:11px;font-weight:700;opacity:.65;margin-bottom:2px}
+button[data-step="soup"]:before{content:"丼へ"}
+button[data-step="noodles"]:before{content:"湯切り！"}
+button[data-step="pork"]:before{content:"肉をのせる"}
+button[data-step="green"]:before{content:"仕上げ"}
+
 </style>
 </head>
 <body>
 <main id="game">
 <header>
- <div class="brand">神戸の中華そば もっこす <small>新人修行中！　v0.4.1　チュートリアル修正版</small></div>
+ <div class="brand">神戸の中華そば もっこす <small>新人修行中！　v0.5　本番ビジュアル土台版</small></div>
  <div class="hud"><div class="order" id="orderText">注文：中華そば × 1</div><div class="timer" id="timer">45</div></div>
 </header>
 
 <section class="scene" id="scene">
  <div class="customer"></div>
  <div class="senpaiWrap"><div class="senpai"></div></div>
- <div class="counter"></div>
+ <div class="kitchenRail"></div><div class="counter"></div><div class="worktop"></div>
  <div class="photoDish">
    <div class="emptyBowl" id="emptyBowl">もっこす</div>
    <img id="chukaImg" src="assets/img/chuka-soba.jpg" alt="中華そば">
    <img id="chashuImg" src="assets/img/chashu-men.jpg" alt="チャーシューめん">
+ </div>
+ <div class="ingredientPreview" id="ingredientPreview">
+   <div class="broth" id="vBroth"></div>
+   <div class="noodle" id="vNoodle"></div>
+   <div class="meat m1" id="vMeat1"></div>
+   <div class="meat m2" id="vMeat2"></div>
+   <div class="meat m3" id="vMeat3"></div>
+   <div class="onion" id="vOnion"></div>
  </div>
 </section>
 
@@ -147,6 +228,19 @@ function playNormal(){
  musicTag.textContent="通常BGM：もっこす Instrumental";
  special.textContent="Lv.11試聴";
 }
+function clearIngredientVisual(){
+ ["vBroth","vNoodle","vMeat1","vMeat2","vMeat3","vOnion"].forEach(id=>document.getElementById(id).style.display="none");
+}
+function updateIngredientVisual(){
+ clearIngredientVisual();
+ if(progress.includes("soup")) vBroth.style.display="block";
+ if(progress.includes("noodles")) vNoodle.style.display="block";
+ const meats=progress.filter(x=>x==="pork").length;
+ if(meats>=1) vMeat1.style.display="block";
+ if(meats>=2) vMeat2.style.display="block";
+ if(meats>=3) vMeat3.style.display="block";
+ if(progress.includes("green")) vOnion.style.display="block";
+}
 function setDishVisual(done=false){
  emptyBowl.style.display=done?"none":"flex";
  chukaImg.classList.remove("show"); chashuImg.classList.remove("show");
@@ -185,7 +279,7 @@ function beginOrder(){
  orderText.textContent=`Lv.${currentLevel}　注文：${dishNames[currentDish]} × 1　（${orderIndex+1}/${levels[currentLevel].orders.length}）`;
  status.textContent=currentDish==="chashu" ? "肉の山を作れ。チャーシューは3回！" : "注文どおりに、中華そばを仕上げよう。";
  document.querySelectorAll("[data-step]").forEach(x=>x.disabled=false);
- setDishVisual(false); updateGuide();
+ setDishVisual(false); clearIngredientVisual(); updateGuide();
  active=true;
  maybeTutorial(currentDish);
 }
@@ -195,6 +289,7 @@ function handleStep(step,btn){
  const exp=expected();
  if(step!==exp){gameOver(`順番が違います。「${labels[exp]}」の番でした。`);return;}
  progress.push(step);
+ updateIngredientVisual();
  const porkCount=progress.filter(x=>x==="pork").length;
  if(currentDish==="chashu" && step==="pork" && porkCount<3){
    btn.disabled=false;
@@ -204,7 +299,7 @@ function handleStep(step,btn){
  }
  if(progress.length===recipes[currentDish].length){
    status.textContent="完成！「できた！」を押して提供しよう。";
-   setDishVisual(true);
+   setDishVisual(true); clearIngredientVisual();
  } else if(!(currentDish==="chashu" && step==="pork" && porkCount<3)){
    status.textContent=`次は「${labels[expected()]}」。`;
  }
