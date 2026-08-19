@@ -6,57 +6,290 @@
 <meta name="theme-color" content="#17130f">
 <title>神戸の中華そば もっこす　新人修行中！</title>
 <style>
-:root{--gold:#f0b42b;--red:#a82118;--ink:#17130f}
+:root{--gold:#efb22e;--red:#a82118;--ink:#17130f}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#111;color:#fff;font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;display:flex;justify-content:center}
+body{margin:0;background:#101010;color:white;font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;display:flex;justify-content:center}
 #game{width:min(100vw,480px);min-height:100svh;background:linear-gradient(#271d13,#111);position:relative;overflow:hidden}
 header{padding:10px 12px;background:#17130f;border-bottom:3px solid var(--gold)}
-.brand{font-weight:900;font-size:17px}.brand small{display:block;color:var(--gold);font-size:12px}
+.brand{font-weight:900;font-size:17px;line-height:1.2}.brand small{display:block;color:var(--gold);font-size:12px;margin-top:2px}
 .hud{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:8px}
-.order,.timer{background:#fff;color:#111;border-radius:10px;padding:9px;font-weight:800}.timer{background:var(--gold);font-size:22px;min-width:82px;text-align:center}
-.scene{height:250px;position:relative;background:linear-gradient(#ded0b5 0 43%,#9c2119 43% 52%,#9c9a91 52%);overflow:hidden}
-.customer{position:absolute;top:55px;left:45%;width:55px;height:85px;border-radius:28px 28px 12px 12px;background:#54463c;opacity:.65}
-.customer:before{content:"";position:absolute;width:42px;height:42px;border-radius:50%;background:#cba888;left:7px;top:-30px}
-.senpai{position:absolute;right:16px;top:18px;width:95px;height:150px;background:#111;border-radius:42px 42px 12px 12px;box-shadow:0 5px 14px #0008}
-.senpai:before{content:"";position:absolute;top:-10px;left:23px;width:50px;height:50px;border-radius:50%;background:#171717}
-.senpai:after{content:"神戸の中華そば\Aもっこす";white-space:pre;position:absolute;top:55px;left:5px;width:85px;text-align:center;color:#ffd335;font-weight:900;font-size:12px;line-height:1.35}
-.counter{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(#b52c20 0 13%,#a5a39b 13%);border-top:4px solid #5d1712}
-.bowl{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);width:175px;height:92px;border-radius:12px 12px 85px 85px;background:#f8f5eb;border:7px solid #d7d0c1;box-shadow:0 10px 15px #0006;overflow:hidden}
-.inside{position:absolute;left:7px;right:7px;top:7px;height:52px;border-radius:50%;background:#eee8d8;overflow:hidden}.inside:before{content:"もっこす";position:absolute;top:3px;left:52px;color:#b5231b;font-weight:900;font-size:12px}
-.layer{position:absolute;inset:0;display:none}#soup{background:#6f3b1eaa}#noodles{background:repeating-linear-gradient(100deg,#e7c16b 0 5px,#d7a94f 5px 8px);inset:14px 12px 3px}#pork{inset:9px;background:radial-gradient(ellipse at center,#b8755d 0 38%,#8b4b39 40% 55%,transparent 57%);transform:scale(1.35)}#green{inset:12px 48px;background:#3e8b38;border-radius:50%}
-.status{padding:8px 12px;background:#241b14;border-top:2px solid #58462f;font-size:14px;min-height:42px}
+.order,.timer{background:#fff;color:#111;border-radius:10px;padding:9px;font-weight:800}
+.timer{background:var(--gold);font-size:22px;min-width:82px;text-align:center}
+.scene{height:260px;position:relative;background:linear-gradient(#ded0b5 0 42%,#a72b20 42% 50%,#9c9a91 50%);overflow:hidden}
+.customer{position:absolute;top:62px;left:42%;width:58px;height:78px;border-radius:26px 26px 12px 12px;background:#665448;opacity:.65}
+.customer:before{content:"";position:absolute;width:42px;height:42px;border-radius:50%;background:#cba888;left:8px;top:-28px}
+.senpaiWrap{position:absolute;right:10px;top:14px;width:108px;height:164px;perspective:400px}
+.senpai{position:absolute;inset:0;background:#111;border-radius:45px 45px 12px 12px;box-shadow:0 6px 15px #0008;transform-origin:center;transition:.35s}
+.senpai:before{content:"";position:absolute;top:-8px;left:28px;width:52px;height:52px;border-radius:50%;background:#171717}
+.senpai:after{content:"神戸の中華そば\Aもっこす";white-space:pre;position:absolute;top:58px;left:7px;width:94px;text-align:center;color:#ffd335;font-weight:900;font-size:12px;line-height:1.35}
+.lv2 .senpai{transform:rotateY(-8deg)}
+.lv3 .senpai{transform:rotateY(-28deg)}
+.lv3 .senpai:after{opacity:.55}
+.counter{position:absolute;left:0;right:0;bottom:0;height:124px;background:linear-gradient(#b52c20 0 13%,#a5a39b 13%);border-top:4px solid #5d1712}
+.photoDish{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);width:205px;height:114px;border-radius:16px;overflow:hidden;box-shadow:0 10px 18px #0007;border:4px solid #ded8c8;background:#eee}
+.photoDish img{width:100%;height:100%;object-fit:cover;display:none}.photoDish img.show{display:block}
+.emptyBowl{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,#eee8d8 0 38%,#faf8f2 39% 61%,#d6d0c3 62% 68%,transparent 69%);display:flex;align-items:center;justify-content:center;color:#a21f17;font-weight:900;font-size:14px}
+.guide{padding:7px 12px;background:#3a2a1e;border-top:1px solid #5f472e;color:#ffe9a5;font-size:12px;font-weight:800;text-align:center}
+.status{padding:8px 12px;background:#241b14;border-top:2px solid #58462f;font-size:14px;min-height:44px}
 .controls{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px}
-button{border:0;border-radius:14px;padding:17px 8px;font-weight:900;font-size:17px;background:#f7efe1;color:#20170f;box-shadow:0 4px 0 #8f8170;touch-action:manipulation}button:active{transform:translateY(3px);box-shadow:0 1px 0 #8f8170}button.done{grid-column:1/-1;background:var(--gold);font-size:20px}button:disabled{opacity:.35}
-.footer{display:flex;gap:8px;padding:0 12px 14px}.footer button{flex:1;padding:11px;font-size:13px;background:#33281e;color:#fff;box-shadow:none}
-.overlay{position:absolute;inset:0;background:#000d;display:flex;align-items:center;justify-content:center;padding:24px;z-index:10}.card{background:#fff;color:#17130f;border-radius:20px;padding:22px;width:100%;text-align:center;border:5px solid var(--gold)}.card h1{font-size:25px;margin:0 0 8px}.card p{line-height:1.65}.card button{width:100%;background:var(--gold);margin-top:8px}.hidden{display:none}
-.musicTag{font-size:11px;color:#ffd35a;padding:0 12px 8px;text-align:center}
+button{border:0;border-radius:14px;padding:16px 8px;font-weight:900;font-size:17px;background:#f7efe1;color:#20170f;box-shadow:0 4px 0 #8f8170;touch-action:manipulation}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 #8f8170}
+button.done{grid-column:1/-1;background:var(--gold);font-size:20px}
+button:disabled{opacity:.35}
+.footer{display:flex;gap:8px;padding:0 12px 12px}.footer button{flex:1;padding:10px 7px;font-size:12px;background:#33281e;color:#fff;box-shadow:none}
+.overlay{position:absolute;inset:0;background:#000d;display:flex;align-items:center;justify-content:center;padding:24px;z-index:10}
+.card{background:#fff;color:#17130f;border-radius:20px;padding:22px;width:100%;text-align:center;border:5px solid var(--gold)}
+.card h1{font-size:25px;margin:0 0 8px}.card p{line-height:1.65}.card button{width:100%;background:var(--gold);margin-top:8px}
+.card .subbtn{background:#eee;color:#222;box-shadow:0 4px 0 #aaa}
+.hidden{display:none}.musicTag{font-size:11px;color:#ffd35a;padding:0 12px 10px;text-align:center}
+.settingsRow{display:flex;gap:8px;margin-top:10px}
+.settingsRow button{flex:1}
 </style>
 </head>
 <body>
 <main id="game">
-<header><div class="brand">神戸の中華そば もっこす <small>新人修行中！　v0.2 音楽実装版</small></div><div class="hud"><div class="order">注文：中華そば × 1</div><div class="timer" id="timer">45</div></div></header>
-<section class="scene"><div class="customer"></div><div class="senpai"></div><div class="counter"></div><div class="bowl"><div class="inside"><div id="soup" class="layer"></div><div id="noodles" class="layer"></div><div id="pork" class="layer"></div><div id="green" class="layer"></div></div></div></section>
+<header>
+ <div class="brand">神戸の中華そば もっこす <small>新人修行中！　v0.4.1　チュートリアル修正版</small></div>
+ <div class="hud"><div class="order" id="orderText">注文：中華そば × 1</div><div class="timer" id="timer">45</div></div>
+</header>
+
+<section class="scene" id="scene">
+ <div class="customer"></div>
+ <div class="senpaiWrap"><div class="senpai"></div></div>
+ <div class="counter"></div>
+ <div class="photoDish">
+   <div class="emptyBowl" id="emptyBowl">もっこす</div>
+   <img id="chukaImg" src="assets/img/chuka-soba.jpg" alt="中華そば">
+   <img id="chashuImg" src="assets/img/chashu-men.jpg" alt="チャーシューめん">
+ </div>
+</section>
+
+<div class="guide" id="guide">中華そば：スープ① → 麺① → チャーシュー① → ネギ①</div>
 <div class="status" id="status">注文どおりに、中華そばを仕上げよう。</div>
-<section class="controls"><button data-step="soup">① スープ</button><button data-step="noodles">② 麺</button><button data-step="pork">③ チャーシュー</button><button data-step="green">④ ネギ</button><button class="done" id="serve">できた！ 提供する</button></section>
-<div class="footer"><button id="reset">やり直す</button><button id="sound">音：ON</button><button id="special">Lv.11試聴</button></div>
+
+<section class="controls">
+ <button data-step="soup">① スープ</button><button data-step="noodles">② 麺</button>
+ <button data-step="pork">③ チャーシュー</button><button data-step="green">④ ネギ</button>
+ <button class="done" id="serve">できた！ 提供する</button>
+</section>
+
+<div class="footer">
+ <button id="reset">やり直す</button>
+ <button id="sound">音：ON</button>
+ <button id="tutorialBtn">チュートリアル：ON</button>
+ <button id="special">Lv.11試聴</button>
+</div>
 <div class="musicTag" id="musicTag">通常BGM：もっこす Instrumental</div>
+
 <audio id="bgm" src="assets/audio/mokkosu-instrumental.mp3" loop preload="auto"></audio>
 <audio id="original" src="assets/audio/mokkosu-original.mp3" loop preload="auto"></audio>
-<div class="overlay" id="start"><div class="card"><h1>新人修行中！</h1><p>まずは <b>中華そば1杯</b>。<br>修行開始と同時に、ゲーム用インストが流れます。</p><button id="startBtn">修行開始</button></div></div>
-<div class="overlay hidden" id="result"><div class="card"><h1 id="resultTitle"></h1><p id="resultText"></p><button id="again">もう一度 Lv.1</button></div></div>
+
+<div class="overlay" id="start">
+ <div class="card">
+  <h1>新人修行中！</h1>
+  <p>Lv.1〜3を通しで修行。<br>初期設定は「新しい料理だけ説明」です。中華そばを見たあとでも、Lv.3でチャーシューめんの説明が出ます。</p>
+  <div class="settingsRow">
+    <button id="startBtn">修行開始</button>
+    <button id="startTutorialBtn" class="subbtn">チュートリアル：ON</button>
+  </div>
+ </div>
+</div>
+
+<div class="overlay hidden" id="tutorial">
+ <div class="card">
+  <h1 id="tutorialTitle">中華そば</h1>
+  <p id="tutorialText"></p>
+  <button id="tutorialOk">わかった！</button>
+  <button id="tutorialNewOnly" class="subbtn">新しい料理の説明は今後も見る</button>
+  <button id="tutorialNever" class="subbtn">すべてのチュートリアル不要</button>
+ </div>
+</div>
+
+<div class="overlay hidden" id="result">
+ <div class="card">
+  <h1 id="resultTitle"></h1>
+  <p id="resultText"></p>
+  <button id="again">Lv.1から再挑戦</button>
+ </div>
+</div>
 </main>
+
 <script>
-const order=["soup","noodles","pork","green"], labels={soup:"スープ",noodles:"麺",pork:"チャーシュー",green:"ネギ"};
-let progress=[],time=45,ticking=null,active=false,soundOn=true,specialMode=false;
 const bgm=document.querySelector("#bgm"), original=document.querySelector("#original");
-bgm.volume=.45; original.volume=.55;
-function playNormal(){specialMode=false;original.pause(); if(soundOn) bgm.play().catch(()=>{}); musicTag.textContent="通常BGM：もっこす Instrumental";}
-function resetGame(){progress=[];time=45;active=true;timer.textContent=time;status.textContent="注文どおりに、中華そばを仕上げよう。";document.querySelectorAll(".layer").forEach(x=>x.style.display="none");document.querySelectorAll("[data-step]").forEach(x=>x.disabled=false);clearInterval(ticking);ticking=setInterval(()=>{if(!active)return;time--;timer.textContent=time;if(time<=0)finish(false,"時間切れ！")},1000);playNormal()}
-function finish(ok,msg){active=false;clearInterval(ticking);resultTitle.textContent=ok?"修行成功！":"GAME OVER";resultText.textContent=ok?"中華そば、できました！ インストを流したまま次のレベルへ進む想定です。":msg+" コンティニューはありません。";result.classList.remove("hidden")}
-document.querySelectorAll("[data-step]").forEach(btn=>btn.onclick=()=>{if(!active)return;const step=btn.dataset.step,expected=order[progress.length];if(step!==expected){finish(false,"順番が違います。「"+labels[expected]+"」の番でした。");return}progress.push(step);document.querySelector("#"+step).style.display="block";btn.disabled=true;status.textContent=progress.length===4?"完成！「できた！」を押して提供しよう。":"次は「"+labels[order[progress.length]]+"」。"});
-serve.onclick=()=>{if(!active)return;progress.length===4?finish(true):finish(false,"まだ中華そばが完成していません。")};
-startBtn.onclick=()=>{start.classList.add("hidden");resetGame()};again.onclick=()=>{result.classList.add("hidden");resetGame()};reset.onclick=()=>{if(active)resetGame()};
-sound.onclick=()=>{soundOn=!soundOn;sound.textContent="音："+(soundOn?"ON":"OFF");if(!soundOn){bgm.pause();original.pause()}else{specialMode?original.play().catch(()=>{}):bgm.play().catch(()=>{})}};
-special.onclick=()=>{specialMode=!specialMode;if(specialMode){bgm.pause();bgm.currentTime=0;original.currentTime=0;if(soundOn)original.play().catch(()=>{});musicTag.textContent="SPECIAL Lv.11：歌入り『もっこす』試聴中";special.textContent="通常BGMへ"}else{original.pause();original.currentTime=0;if(soundOn)bgm.play().catch(()=>{});musicTag.textContent="通常BGM：もっこす Instrumental";special.textContent="Lv.11試聴"}};
+bgm.volume=.42; original.volume=.55;
+let soundOn=true, specialMode=false, currentLevel=1, time=45, ticking=null, active=false;
+let orderIndex=0, progress=[], currentDish="chuka";
+let tutorialMode = localStorage.getItem("mokkosuTutorialMode_v041") || "new";
+let seenTutorials = JSON.parse(localStorage.getItem("mokkosuSeenTutorials_v041") || "{}");
+const labels={soup:"スープ",noodles:"麺",pork:"チャーシュー",green:"ネギ"};
+
+const levels={
+  1:{orders:["chuka"], time:45, class:""},
+  2:{orders:["chuka","chuka"], time:55, class:"lv2"},
+  3:{orders:["chuka","chashu"], time:65, class:"lv3"}
+};
+const recipes={
+  chuka:["soup","noodles","pork","green"],
+  chashu:["soup","noodles","pork","pork","pork","green"]
+};
+const dishNames={chuka:"中華そば",chashu:"チャーシューめん"};
+
+function tutorialLabel(){
+ const labels={new:"チュートリアル：新料理のみ",all:"チュートリアル：毎回",off:"チュートリアル：OFF"};
+ const txt=labels[tutorialMode];
+ tutorialBtn.textContent=txt; startTutorialBtn.textContent=txt;
+}
+tutorialLabel();
+
+function playNormal(){
+ specialMode=false; original.pause();
+ if(soundOn) bgm.play().catch(()=>{});
+ musicTag.textContent="通常BGM：もっこす Instrumental";
+ special.textContent="Lv.11試聴";
+}
+function setDishVisual(done=false){
+ emptyBowl.style.display=done?"none":"flex";
+ chukaImg.classList.remove("show"); chashuImg.classList.remove("show");
+ if(done){(currentDish==="chuka"?chukaImg:chashuImg).classList.add("show")}
+}
+function updateGuide(){
+ guide.textContent = currentDish==="chuka"
+   ? "中華そば：スープ① → 麺① → チャーシュー① → ネギ①"
+   : "チャーシューめん：スープ① → 麺① → チャーシュー③ → ネギ①";
+}
+function maybeTutorial(dish){
+ if(tutorialMode==="off") return false;
+ if(tutorialMode==="new" && seenTutorials[dish]) return false;
+ tutorialTitle.textContent=dishNames[dish];
+ tutorialText.innerHTML = dish==="chuka"
+   ? "スープ① → 麺① → チャーシュー① → ネギ①<br><b>それぞれ1回ずつタップ！</b>"
+   : "スープ① → 麺① → <b>チャーシュー③</b> → ネギ①<br><b>チャーシューを3回のせないと完成しません。</b>";
+ tutorial.classList.remove("hidden");
+ active=false;
+ return true;
+}
+function markSeen(dish=currentDish){
+ seenTutorials[dish]=true;
+ localStorage.setItem("mokkosuSeenTutorials_v041",JSON.stringify(seenTutorials));
+}
+function setLevel(lv){
+ currentLevel=lv; orderIndex=0;
+ scene.className="scene "+levels[lv].class;
+ time=levels[lv].time; timer.textContent=time;
+ beginOrder();
+ clearInterval(ticking);
+ ticking=setInterval(()=>{if(!active)return; time--; timer.textContent=time; if(time<=0)gameOver("時間切れ！")},1000);
+}
+function beginOrder(){
+ progress=[]; currentDish=levels[currentLevel].orders[orderIndex];
+ orderText.textContent=`Lv.${currentLevel}　注文：${dishNames[currentDish]} × 1　（${orderIndex+1}/${levels[currentLevel].orders.length}）`;
+ status.textContent=currentDish==="chashu" ? "肉の山を作れ。チャーシューは3回！" : "注文どおりに、中華そばを仕上げよう。";
+ document.querySelectorAll("[data-step]").forEach(x=>x.disabled=false);
+ setDishVisual(false); updateGuide();
+ active=true;
+ maybeTutorial(currentDish);
+}
+function expected(){return recipes[currentDish][progress.length]}
+function handleStep(step,btn){
+ if(!active)return;
+ const exp=expected();
+ if(step!==exp){gameOver(`順番が違います。「${labels[exp]}」の番でした。`);return;}
+ progress.push(step);
+ const porkCount=progress.filter(x=>x==="pork").length;
+ if(currentDish==="chashu" && step==="pork" && porkCount<3){
+   btn.disabled=false;
+   status.textContent=`チャーシュー ${porkCount}/3。まだ肉！`;
+ }else{
+   btn.disabled=true;
+ }
+ if(progress.length===recipes[currentDish].length){
+   status.textContent="完成！「できた！」を押して提供しよう。";
+   setDishVisual(true);
+ } else if(!(currentDish==="chashu" && step==="pork" && porkCount<3)){
+   status.textContent=`次は「${labels[expected()]}」。`;
+ }
+}
+document.querySelectorAll("[data-step]").forEach(btn=>btn.onclick=()=>handleStep(btn.dataset.step,btn));
+
+serve.onclick=()=>{
+ if(!active)return;
+ if(progress.length!==recipes[currentDish].length){gameOver("まだ完成していません。");return;}
+ orderIndex++;
+ if(orderIndex<levels[currentLevel].orders.length){
+   active=false; status.textContent="提供成功！ 次の注文！";
+   setTimeout(beginOrder,500); return;
+ }
+ if(currentLevel<3){
+   active=false; clearInterval(ticking);
+   status.textContent=`Lv.${currentLevel} クリア！ 先輩が少し気にしている…`;
+   setTimeout(()=>setLevel(currentLevel+1),900);
+ }else{
+   active=false; clearInterval(ticking);
+   resultTitle.textContent="Lv.1〜3 修行成功！";
+   resultText.textContent="チャーシューめんまで突破。先輩が少しだけこちらを向きました。";
+   result.classList.remove("hidden");
+ }
+};
+function gameOver(msg){
+ active=false; clearInterval(ticking);
+ resultTitle.textContent="GAME OVER";
+ resultText.textContent=msg+"　コンティニューはありません。Lv.1からやり直しです。";
+ result.classList.remove("hidden");
+}
+function restart(){
+ result.classList.add("hidden");
+ bgm.currentTime=0; original.pause(); original.currentTime=0;
+ playNormal(); setLevel(1);
+}
+startBtn.onclick=()=>{start.classList.add("hidden");playNormal();setLevel(1)};
+again.onclick=restart; reset.onclick=restart;
+tutorialOk.onclick=()=>{
+ markSeen();
+ tutorial.classList.add("hidden");
+ active=true;
+};
+tutorialNewOnly.onclick=()=>{
+ tutorialMode="new";
+ markSeen();
+ localStorage.setItem("mokkosuTutorialMode_v041","new");
+ tutorialLabel();
+ tutorial.classList.add("hidden");
+ active=true;
+};
+tutorialNever.onclick=()=>{
+ tutorialMode="off";
+ localStorage.setItem("mokkosuTutorialMode_v041","off");
+ markSeen();
+ tutorialLabel();
+ tutorial.classList.add("hidden");
+ active=true;
+};
+function toggleTutorial(){
+ tutorialMode = tutorialMode==="new" ? "all" : tutorialMode==="all" ? "off" : "new";
+ localStorage.setItem("mokkosuTutorialMode_v041", tutorialMode);
+ if(tutorialMode==="new"){
+   seenTutorials={};
+   localStorage.removeItem("mokkosuSeenTutorials_v041");
+ }
+ tutorialLabel();
+}
+tutorialBtn.onclick=toggleTutorial; startTutorialBtn.onclick=toggleTutorial;
+sound.onclick=()=>{
+ soundOn=!soundOn; sound.textContent="音："+(soundOn?"ON":"OFF");
+ if(!soundOn){bgm.pause();original.pause()}else{specialMode?original.play().catch(()=>{}):bgm.play().catch(()=>{})}
+};
+special.onclick=()=>{
+ specialMode=!specialMode;
+ if(specialMode){
+   bgm.pause(); original.currentTime=0; if(soundOn)original.play().catch(()=>{});
+   musicTag.textContent="SPECIAL Lv.11：歌入り『もっこす』試聴中";
+   special.textContent="通常BGMへ";
+ }else{
+   original.pause(); original.currentTime=0; if(soundOn)bgm.play().catch(()=>{});
+   musicTag.textContent="通常BGM：もっこす Instrumental";
+   special.textContent="Lv.11試聴";
+ }
+};
 </script>
-</body></html>
+</body>
+</html>
